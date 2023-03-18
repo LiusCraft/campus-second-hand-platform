@@ -42,9 +42,7 @@ public class GoodController {
     @GetMapping("user/{category}")
     @LuckVerify
     public  R getUserGoodList(@PathVariable(value = "category") Integer categoryId, PageDto pageDto) {
-        String userId = ThreadLocalServlet.getValue("userId");
-        assert userId != null;
-        return goodService.getList(pageDto.getPage(), pageDto.getLimit(), categoryId, Integer.valueOf(userId));
+        return goodService.getList(pageDto.getPage(), pageDto.getLimit(), categoryId, ThreadLocalServlet.getUserId());
     }
 
     @GetMapping("{id}")
