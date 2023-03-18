@@ -1,0 +1,18 @@
+server:
+  port: 8001
+spring:
+  profiles:
+    active: dev
+#    include:
+luck-permission:
+  packages: com.liuscraft.tradingplatform.controller
+  refresh-permission: true
+  table:
+    permission-name: luckpermiss
+  verify-interceptors: com.liuscraft.tradingplatform.config.LuckVerifyImpl
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
