@@ -26,7 +26,23 @@ sql脚本文件根路径下的trading.sql
 2.修改applicati配置文件，与您的MySQL连接上。
 
 3.去我的luck-permission仓库里拉取下来，然后使用maven的install将该包放在自己的本地maven repo下
+或者通过下面方式引入
+```xml
+<repositories>
+    <repository>
+        <id>liuscraft-maven</id>
+        <url>https://gitee.com/liuscraft/maven/raw/master</url>
+    </repository>
+</repositories>
 
+<dependencies>
+    <dependency>
+        <groupId>com.liuscraft</groupId>
+        <artifactId>luck-permission-spring-boot-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
 
 #### 使用说明
 

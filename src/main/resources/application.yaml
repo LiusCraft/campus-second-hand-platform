@@ -7,8 +7,6 @@ spring:
 luck-permission:
   packages: com.liuscraft.tradingplatform.controller
   refresh-permission: true
-  table:
-    permission-name: luckpermiss
   verify-interceptors: com.liuscraft.tradingplatform.config.LuckVerifyImpl
 mybatis-plus:
   global-config:
