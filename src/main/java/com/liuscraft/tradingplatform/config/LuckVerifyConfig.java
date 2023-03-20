@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Primary;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author LiusCraft
@@ -23,11 +25,11 @@ public class LuckVerifyConfig {
     public LuckGetUserInfoService getUserInfoService() {
         return new LuckGetUserInfoService() {
             @Override
-            public Integer getUserId(HttpServletRequest request) {
+            public Set<Integer> getUserId(HttpServletRequest request) {
                 String userId = JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ID);
                 if (userId == null || userId.isEmpty()) return null;
                 ThreadLocalServlet.editor.setValue("userId", Integer.parseInt(userId));
-                return JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID);
+                return new HashSet<>(JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID));
             }
         };
     }
