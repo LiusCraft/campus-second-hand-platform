@@ -15,7 +15,7 @@ import java.io.OutputStreamWriter;
  * @author LiusCraft
  * @date 2023/3/12 23:50
  */
-public class LuckVerifyImpl implements LuckVerifyInterceptor {
+public class LuckVerifyImpl implements LuckVerifyInterceptor<LuckAuthority> {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler, LuckVerifyEntity luckVerifyEntity, LuckAuthority luckAuthority) {
         if (luckAuthority == null) throw new RuntimeException("请先登录账号");

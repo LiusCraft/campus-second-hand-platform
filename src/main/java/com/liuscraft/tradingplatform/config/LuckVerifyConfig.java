@@ -1,7 +1,9 @@
 package com.liuscraft.tradingplatform.config;
 
-import com.liuscraft.luckpermission.service.LuckGetUserInfoService;
-import com.liuscraft.tradingplatform.service.IUserService;
+import com.liuscraft.luckpermission.entity.LuckAuthority;
+import com.liuscraft.luckpermission.entity.LuckPermission;
+import com.liuscraft.luckpermission.service.ILuckRolePermissionService;
+import com.liuscraft.luckpermission.service.LuckAuthorityService;
 import com.liuscraft.tradingplatform.utils.JwtUtils;
 import com.liuscraft.tradingplatform.utils.threadlocal.ThreadLocalServlet;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,17 +22,21 @@ import java.util.Set;
  */
 @Configuration
 public class LuckVerifyConfig {
+    @Resource
+    ILuckRolePermissionService luckRolePermissionService;
+
 
     @Bean
-    @Primary
-    public LuckGetUserInfoService getUserInfoService() {
-        return new LuckGetUserInfoService() {
+    public LuckAuthorityService<LuckAuthority> getUserInfoService() {
+        return new LuckAuthorityService<LuckAuthority>() {
             @Override
-            public Set<Integer> getUserId(HttpServletRequest request) {
+            public LuckAuthority getUserAuthorization(HttpServletRequest request) {
                 String userId = JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ID);
                 if (userId == null || userId.isEmpty()) return null;
                 ThreadLocalServlet.editor.setValue("userId", Integer.parseInt(userId));
-                return new HashSet<>(JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID));
+                Integer id = JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID);
+                List<LuckPermission> rolePermission = luckRolePermissionService.getRolePermission(JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID));
+                return new LuckAuthority(null, rolePermission);
             }
         };
     }
