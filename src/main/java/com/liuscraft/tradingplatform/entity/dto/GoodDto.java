@@ -1,12 +1,12 @@
 package com.liuscraft.tradingplatform.entity.dto;
 
-import lombok.Data;
-import org.hibernate.validator.constraints.Range;
-
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.Data;
 
 /**
  * @author LiusCraft
@@ -22,4 +22,6 @@ public class GoodDto {
     private String name;
     @NotBlank(message = "请完善商品描述")
     private String description;
+
+    MultipartFile img;
 }

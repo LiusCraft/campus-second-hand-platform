@@ -19,7 +19,7 @@
       </template>
       <template v-else>
         <v-card-text class="mb-12">
-          <v-img height="150px" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"/>
+          <v-img  height="250px" :src="`/api/goods/img/${goodData.id}`"/>
           <v-list dense class="pa-0">
             <v-list-item>
               商品名: {{goodData.name}}
@@ -62,8 +62,8 @@
   </v-dialog>
 </template>
 <script>
-import {API_GOOD_BUY, API_GOOD_GET_INFO} from "@/apis/good";
-import {mapGetters} from "vuex";
+import { API_GOOD_BUY, API_GOOD_GET_INFO } from "@/apis/good";
+import { mapGetters } from "vuex";
 
 export default {
   props: {

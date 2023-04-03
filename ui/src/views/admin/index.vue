@@ -1,6 +1,10 @@
 <template>
   <div v-if="userInfo">
-    <v-navigation-drawer permanent app>
+    <v-app-bar v-if="$isMobile()">
+      <v-app-bar-nav-icon @click="toggleNavi=!toggleNavi"></v-app-bar-nav-icon>
+      <v-toolbar-title>{{ $route.meta.title }}</v-toolbar-title>
+    </v-app-bar>
+    <v-navigation-drawer app :permanent="!$isMobile()" disable-resize-watcher v-model="toggleNavi">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
@@ -46,7 +50,7 @@
 
 </template>
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   computed: {
@@ -56,6 +60,7 @@ export default {
   },
   data() {
     return {
+      toggleNavi: !this.$isMobile(),
       leftItems: [
         {
           icon: "mdi-cloud-circle",

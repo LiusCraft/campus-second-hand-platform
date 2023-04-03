@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import {API_USER_INFO, API_USER_LOGIN} from "@/apis/user";
+import { API_USER_INFO, API_USER_LOGIN } from "@/apis/user";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex)
 
@@ -8,13 +8,18 @@ export default new Vuex.Store({
   state: {
     userInfo: {
       token: localStorage.getItem("token"),
-      data: null
+      data: null,
     }
   },
   getters:{
     userInfo({userInfo}){
-      if (!userInfo || !userInfo.token || (userInfo.token && !userInfo.data)) {
-        return false;
+      if(!userInfo || !userInfo.token) return false;
+      if (!userInfo.data) {
+        let localData = localStorage.getItem("userData");
+        if(!localData){
+          return false;
+        }
+        return userInfo.data = JSON.parse(localData);
       }
       return userInfo;
     }
@@ -22,6 +27,7 @@ export default new Vuex.Store({
   mutations: {
     userInfo(state, data) {
       state.userInfo = Object.assign(state.userInfo, data);
+      localStorage.setItem("userData", JSON.stringify(data));
     }
   },
   actions: {

@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <v-container>
     <v-card elevation="0">
       <v-tabs
           center-active
           v-model="currentTab"
-          @change="changeTab"
       >
         <v-tab key="buyOrders">购买订单</v-tab>
         <v-tab key="sells">卖出订单</v-tab>
@@ -57,11 +56,11 @@
       </v-tabs-items>
 
     </v-card>
-  </div>
+  </v-container>
 </template>
 <script>
+import { API_ORDERS_GET_LIST } from "@/apis/adminOrder";
 import OrderList from "@/components/OrderList/index.vue";
-import {API_ORDERS_GET_LIST} from "@/apis/adminOrder";
 
 export default {
   components: {OrderList},
@@ -137,6 +136,11 @@ export default {
         this.orderList.data = data.data.data || [];
       });
     },
+  },
+  watch:{
+    currentTab() {
+      this.changeTab();
+    }
   }
 }
 </script>

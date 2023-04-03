@@ -1,17 +1,15 @@
 <template>
   <v-card
-      class="mx-auto"
-      max-width="350"
-      elevation="1"
-      v-if="goodItem"
-      @click="call(goodItem, index)"
+    class="mx-auto"
+    max-width="350"
+    elevation="1"
+    v-if="goodItem"
+    @click="call(goodItem, index)"
   >
-    <v-img
-        class="white--text align-end"
-        height="150px"
-        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-    >
-      <v-card-title>{{ goodItem.name }}</v-card-title>
+    <v-img  height="150px" :src="`/api/goods/img/${goodItem.id}`">
+      <v-overlay absolute class="white--text align-end">
+        <v-card-title class="pa-2">{{ goodItem.name }}</v-card-title>
+      </v-overlay>
     </v-img>
 
     <v-card-subtitle class="pb-0">{{ goodItem.gmtCreate }}</v-card-subtitle>
@@ -33,7 +31,7 @@ export default {
   props: {
     index: {
       type: Number,
-      default: null,
+      default: null
     },
     goodItem: {
       type: Object,
@@ -41,8 +39,8 @@ export default {
     },
     call: {
       type: Function,
-      default: ()=>{}
+      default: () => {}
     }
   }
-}
+};
 </script>

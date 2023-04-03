@@ -6,7 +6,6 @@
           center-active
           dark
           v-model="currentTab"
-          @change="changeTab"
       >
         <v-tab key="buyOrders">购买订单</v-tab>
         <v-tab key="sells">卖出订单</v-tab>
@@ -63,7 +62,7 @@
   </v-container>
 </template>
 <script>
-import {API_ORDERS_GET_LIST} from "@/apis/order";
+import { API_ORDERS_GET_LIST } from "@/apis/order";
 import OrderList from "@/components/OrderList/index.vue";
 
 export default {
@@ -130,8 +129,11 @@ export default {
   },
   methods: {
     changeTab() {
+      console.log("切换？")
       this.orderStatus = -1;
       this.page = 1;
+      this.orderList.data = [];
+      this.orderList.total = 0;
       this.getList();
     },
     getList() {
@@ -140,6 +142,11 @@ export default {
         this.orderList.data = data.data.data || [];
       });
     },
+  },
+  watch:{
+    currentTab() {
+      this.changeTab();
+    }
   }
 }
 </script>

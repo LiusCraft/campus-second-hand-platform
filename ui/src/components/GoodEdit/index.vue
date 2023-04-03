@@ -23,6 +23,7 @@
             </v-sheet>
           </template>
         </v-select>
+        <v-file-input label="封面图" v-model="editData.img"/>
         <v-text-field label="物品名称" v-model="editData.name" hide-details/>
         <v-text-field label="物品数量" type="number" v-model="editData.count" hide-details/>
         <v-textarea label="物品描述" placeholder="请描述您的物品!" v-model="editData.description" rows="3" hide-details/>

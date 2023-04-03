@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+img/
+
 
 ### STS ###
 .apt_generated
@@ -34,3 +36,4 @@ build/
 mvnw
 mvnw.cmd
 .mvn
+ui/package-lock.json

@@ -3,6 +3,8 @@ server:
 spring:
   profiles:
     active: dev
+good:
+  saveimg: "D:\\project\\spring\\trading-platform\\img"
 #    include:
 luck-permission:
   packages: com.liuscraft.tradingplatform.controller

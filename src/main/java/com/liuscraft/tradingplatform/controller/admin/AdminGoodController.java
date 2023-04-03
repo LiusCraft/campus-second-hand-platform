@@ -1,16 +1,22 @@
 package com.liuscraft.tradingplatform.controller.admin;
 
 
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.liuscraft.luckpermission.annotations.LuckVerify;
 import com.liuscraft.tradingplatform.entity.dto.GoodDto;
-import com.liuscraft.tradingplatform.entity.dto.PageDto;
-import com.liuscraft.tradingplatform.service.ICategoryService;
 import com.liuscraft.tradingplatform.service.IGoodService;
 import com.liuscraft.tradingplatform.utils.R;
 import com.liuscraft.tradingplatform.utils.threadlocal.ThreadLocalServlet;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -39,7 +45,7 @@ public class AdminGoodController {
     }
 
     @PutMapping("{id}")
-    public R updateGoodInfo(@PathVariable("id") Integer goodId, @RequestBody GoodDto goodDto) {
+    public R updateGoodInfo(@PathVariable("id") Integer goodId, GoodDto goodDto) {
         ThreadLocalServlet.editor.isAdmin();
         return goodService.updateGoodById(goodId, goodDto);
     }

@@ -1,37 +1,44 @@
 package com.liuscraft.tradingplatform.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.liuscraft.luckpermission.entity.LuckAuthority;
-import com.liuscraft.luckpermission.service.LuckAuthorityService;
-import com.liuscraft.tradingplatform.entity.Category;
-import com.liuscraft.tradingplatform.entity.Good;
-import com.liuscraft.tradingplatform.entity.User;
-import com.liuscraft.tradingplatform.entity.dto.GoodDto;
-import com.liuscraft.tradingplatform.entity.dto.PageDto;
-import com.liuscraft.tradingplatform.entity.vo.CategoryVo;
-import com.liuscraft.tradingplatform.entity.vo.GoodVo;
-import com.liuscraft.tradingplatform.entity.vo.UserVo;
-import com.liuscraft.tradingplatform.mapper.GoodMapper;
-import com.liuscraft.tradingplatform.service.ICategoryService;
-import com.liuscraft.tradingplatform.service.IGoodService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.liuscraft.tradingplatform.service.IOrderService;
-import com.liuscraft.tradingplatform.service.IUserService;
-import com.liuscraft.tradingplatform.utils.JwtUtils;
-import com.liuscraft.tradingplatform.utils.R;
-import com.liuscraft.tradingplatform.utils.threadlocal.ThreadLocalServlet;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.liuscraft.tradingplatform.config.TradingProperties;
+import com.liuscraft.tradingplatform.entity.Category;
+import com.liuscraft.tradingplatform.entity.Good;
+import com.liuscraft.tradingplatform.entity.User;
+import com.liuscraft.tradingplatform.entity.dto.GoodDto;
+import com.liuscraft.tradingplatform.entity.vo.CategoryVo;
+import com.liuscraft.tradingplatform.entity.vo.GoodVo;
+import com.liuscraft.tradingplatform.entity.vo.UserVo;
+import com.liuscraft.tradingplatform.mapper.GoodMapper;
+import com.liuscraft.tradingplatform.service.ICategoryService;
+import com.liuscraft.tradingplatform.service.IGoodService;
+import com.liuscraft.tradingplatform.service.IOrderService;
+import com.liuscraft.tradingplatform.service.IUserService;
+import com.liuscraft.tradingplatform.utils.R;
+import com.liuscraft.tradingplatform.utils.threadlocal.ThreadLocalServlet;
 
 /**
  * <p>
@@ -109,6 +116,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
         return R.ok().data("data", goodVo); }
 
     @Override
+    @Transactional
     public R updateGoodById(Integer goodId, GoodDto goodDto) {
         int userId = ThreadLocalServlet.getUserId();
         boolean admin = ThreadLocalServlet.isAdmin();
@@ -124,21 +132,30 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
         BeanUtils.copyProperties(goodVo, good);
         BeanUtils.copyProperties(goodDto, good);
         good.setId(goodId);
+        if(!ObjectUtils.isEmpty(goodDto.getImg())) {
+            if(!saveImg(good, goodDto.getImg())){
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return R.error().msg("封面图存储失败");
+            }
+            good.setProfileDisplay("good-"+goodId+".jpg");
+        }
         if (!updateById(good)) return R.error().msg("更新商品信息失败");
         return R.ok().msg("商品信息更新成功");
     }
 
     @Override
+    @Transactional
     public R addGood(GoodDto goodDto) {
        Good good = new Good();
         R categoryR = categoryService.cateGoryById(goodDto.getCategoryId());
         if (!categoryR.getState()) return categoryR;
         BeanUtils.copyProperties(goodDto, good);
         Integer userId = ThreadLocalServlet.getUserId();
-        if (userId < 0) return R.error().msg("请先登录");
         good.setUserId(userId);
-       if (!save(good)) return R.error().msg("添加商品失败");
-       return R.ok().msg("添加商品成功").data("data", good);
+        good.setProfileDisplay("good-"+good.getId()+".jpg");
+        if (!save(good)) return R.error().msg("添加商品失败");
+        if(!saveImg(good, goodDto.getImg())) TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        return R.ok().msg("添加商品成功").data("data", good);
     }
 
     @Override
@@ -186,5 +203,18 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
             }
         }
 
+    }
+    @Override
+    public boolean saveImg(Good good, MultipartFile getImg) {
+        String goodImgName = "good-"+good.getId()+".jpg";
+        good.setProfileDisplay(goodImgName);
+         try {
+            getImg.transferTo(new File(TradingProperties.getInstance().getSaveImgLocation(), goodImgName));
+             updateById(good);
+             return true;
+         } catch (IOException e) {
+             return false;
+         }
+        
     }
 }

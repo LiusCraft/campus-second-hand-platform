@@ -1,4 +1,4 @@
-import Axios from 'axios'
+import Axios from 'axios';
 Axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 const instance = Axios.create({
@@ -6,16 +6,22 @@ const instance = Axios.create({
     timeout: 3000,
 });
 
-instance.interceptors.request.use(config=>{
+instance.interceptors.request.use(config => {
     let token = localStorage.getItem("token");
     if (token) config.headers["token"] = token;
     if (config.params) {
         let urlSearchParams = new URLSearchParams(config.params);
-        config.url +="?"+urlSearchParams.toString();
+        config.url += "?" + urlSearchParams.toString();
     }
-    if (config.method === 'post' || config.method === 'put')
-    {
-        config.data = typeof config.data === 'object'? JSON.stringify(config.data):config.data;
+    if ((config.method === 'post' || config.method === 'put') && !config.hasFile) {
+        config.data = typeof config.data === 'object' ? JSON.stringify(config.data) : config.data;
+    } else if (config.hasFile) {
+        let formdata = new FormData();
+        config.headers["Content-Type"] = "multipart/form-data;boundary="+new Date().getTime()
+        Object.keys(config.data).forEach(key => {
+            formdata.append(key, config.data[key]);
+        })
+        config.data = formdata;
     }
     return config;
 });

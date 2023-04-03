@@ -1,14 +1,14 @@
 package com.liuscraft.tradingplatform.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.liuscraft.tradingplatform.entity.Category;
-import com.liuscraft.tradingplatform.entity.Good;
-import com.liuscraft.tradingplatform.entity.User;
-import jdk.nashorn.internal.objects.annotations.Function;
-import lombok.Data;
+import java.util.Date;
+
 import org.springframework.beans.BeanUtils;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.liuscraft.tradingplatform.entity.Good;
+
+import jdk.nashorn.internal.objects.annotations.Function;
+import lombok.Data;
 
 /**
  * @author LiusCraft

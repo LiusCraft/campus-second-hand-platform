@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 let rootApi = '/admin/goods';
 export function API_GOOD_GET_LIST(page=1, limit=10, category="all") {
     return request({
@@ -18,7 +18,9 @@ export function API_ADMIN_GOOD_SAVE(good=null){
     return request({
         url: rootApi + (methodName === "put"?"/"+good.id:""),
         method: methodName,
-        data: good
+        hasFile: true,
+        data: good,
+
     });
 }
 
