@@ -19,7 +19,7 @@
     <repositories>
         <repository>
             <id>liuscraft-maven</id>
-            <url>https://gitee.com/liuscraft/raw/maven/master</url>
+            <url>https://gitee.com/liuscraft/maven/raw/master</url>
         </repository>
     </repositories>
     <dependencies>
