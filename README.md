@@ -44,6 +44,14 @@ sql脚本文件根路径下的trading.sql
 </dependencies>
 ```
 
+4.请根据自己的需求更改商品封面图片存储位置
+```yaml
+# 因为是毕设，并没有想着用OSS文件存储服务，直接用最普通的本地文件读写。
+# 下面的地址需要更换为你想存放的文件夹位置
+good:
+  saveimg: "D:\\project\\spring\\trading-platform\\img"
+```
+
 #### 使用说明
 
 1.前端项目需要先npm install(在根目录下的ui文件夹下),然后再执行npm run serve即可启动前端项目

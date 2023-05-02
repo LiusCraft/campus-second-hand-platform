@@ -220,6 +220,8 @@ INSERT INTO `luck_role_permission` VALUES (2, 66, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 68, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 73, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 75, 1);
+INSERT INTO `luck_role_permission` VALUES (2, 68, 1);
+INSERT INTO `luck_role_permission` VALUES (2, 15, 1);
 
 -- ----------------------------
 -- Table structure for order
