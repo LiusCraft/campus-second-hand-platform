@@ -1,6 +1,6 @@
 # 校园二手平台
 
-#### 介绍
+## 介绍
 
 校园二手交易平台毕设
 
@@ -12,13 +12,26 @@
 
 有反馈功能与后台查看反馈信息。
 
-#### 软件架构
+## 软件架构
 
 后端用到了springboot、mybatis-plus、[luckpermission](https://gitee.com/liuscraft/luck-permission)(自己写的一个权限工具包)
 
 前端用到了 vue2、vuetify2、axios、router、vuex
 
-#### 安装教程
+## 网站展示
+![登录页面](./doc/img/login.png)
+![注册页面](./doc/img/register.png)
+![首页](./doc/img/home.png)
+![首页](./doc/img/home2.png)
+![管理商品](./doc/img/good.png)
+![管理商品](./doc/img/good2.png)
+![商品浏览](./doc/img/good3.png)
+![管理订单](./doc/img/order.png)
+![后台](./doc/img/admin.png)
+
+
+
+## 安装教程
 
 1.导入数据库
 sql脚本文件根路径下的trading.sql
@@ -52,7 +65,7 @@ good:
   saveimg: "D:\\project\\spring\\trading-platform\\img"
 ```
 
-#### 使用说明
+## 使用说明
 
 1.前端项目需要先npm install(在根目录下的ui文件夹下),然后再执行npm run serve即可启动前端项目
 
