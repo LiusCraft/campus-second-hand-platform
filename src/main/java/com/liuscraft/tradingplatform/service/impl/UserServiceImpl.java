@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         CacheObject<String> cacheObject = registerEmailCache.get(email);
         if(cacheObject != null) {
             if (!cacheObject.isExpire()) {
-                return R.ok().msg("请不要重复获取密码, "+
+                return R.ok().msg("请不要重复获取验证码"+
                                 (cacheObject.getExpireTime()-currentTime)/1000+
                                 "秒后再试!")
                         .data("expire", cacheObject.getExpireTime())
