@@ -19,15 +19,15 @@
 前端用到了 vue2、vuetify2、axios、router、vuex
 
 ## 网站展示
-![登录页面](./doc/img/login.png)
-![注册页面](./doc/img/register.png)
-![首页](./doc/img/home.png)
-![首页](./doc/img/home2.png)
-![管理商品](./doc/img/good.png)
-![管理商品](./doc/img/good2.png)
-![商品浏览](./doc/img/good3.png)
-![管理订单](./doc/img/order.png)
-![后台](./doc/img/admin.png)
+![登录页面](doc/img/login.png)
+![注册页面](doc/img/register.png)
+![首页](doc/img/home.png)
+![首页](doc/img/home2.png)
+![管理商品](doc/img/good.png)
+![管理商品](doc/img/good2.png)
+![商品浏览](doc/img/good3.png)
+![管理订单](doc/img/order.png)
+![后台](doc/img/admin.png)
 
 
 
