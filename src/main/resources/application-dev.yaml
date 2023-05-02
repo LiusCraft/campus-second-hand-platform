@@ -4,3 +4,10 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/trading?serverTimezone=Asia/Shanghai
     username: root
     password: root
+  # 邮箱配置
+  mail:
+    from: "校园二手交易平台"
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    username: liuscraft@qq.com
+    password: itaqmdfjryiqcidb

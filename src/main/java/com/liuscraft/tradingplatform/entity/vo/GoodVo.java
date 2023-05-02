@@ -27,9 +27,13 @@ public class GoodVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtModified;
     private CategoryVo category;
+    private boolean isHot = false;
     @Function
     public static GoodVo toVo(Good good){
         GoodVo goodVo= new GoodVo();
+        if (good.getHots() != null) {
+            goodVo.setHot(good.getHots().getTime() - System.currentTimeMillis()>1000);
+        }
         BeanUtils.copyProperties(good, goodVo);
         return goodVo;
     }

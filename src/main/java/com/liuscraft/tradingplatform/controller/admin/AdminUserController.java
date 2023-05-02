@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * @author LiusCraft
@@ -35,7 +36,7 @@ public class AdminUserController {
     }
 
     @PutMapping("{id}")
-    public R updateUser(@PathVariable Integer id, @RequestBody UserDto user) {
+    public R updateUser(@PathVariable Integer id, @RequestBody @Valid UserDto user) {
         User byId = userService.getById(id);
         if (byId == null) return R.error().msg("没有这个用户");
         BeanUtils.copyProperties(user, byId);

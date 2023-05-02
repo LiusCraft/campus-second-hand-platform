@@ -53,3 +53,10 @@ export function API_GOOD_DELETE(id){
         url: rootApi+"/"+id
     })
 }
+
+export function API_GET_GOOD_HOTS() {
+    return request({
+        method: "get",
+        url: rootApi + "/hots"
+    })
+}

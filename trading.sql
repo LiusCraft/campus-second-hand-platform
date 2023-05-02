@@ -53,52 +53,27 @@ CREATE TABLE `feedback`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of feedback
--- ----------------------------
-INSERT INTO `feedback` VALUES (1, 2, 'gdrg', 0);
-
--- ----------------------------
 -- Table structure for good
 -- ----------------------------
 DROP TABLE IF EXISTS `good`;
 CREATE TABLE `good`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名',
-  `profile_display` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '事物展示图',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '无描述' COMMENT '商品描述',
-  `count` int NOT NULL DEFAULT 1 COMMENT '商品数量',
-  `category_id` int NOT NULL DEFAULT 0 COMMENT '产品类别',
-  `user_id` int NOT NULL COMMENT '发布者id',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除',
-  `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` timestamp NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `goods_FK`(`category_id`) USING BTREE,
-  INDEX `goods_FK_1`(`user_id`) USING BTREE,
-  CONSTRAINT `goods_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `goods_FK_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of good
--- ----------------------------
-INSERT INTO `good` VALUES (1, 'fsefsefse', NULL, 'sefs', 0, 2, 1, 0, '2023-03-10 23:26:23', NULL);
-INSERT INTO `good` VALUES (2, 'fsefsefse', NULL, 'sefs', 0, 2, 1, 0, '2023-03-10 23:26:23', NULL);
-INSERT INTO `good` VALUES (3, '就，接口，接口，', NULL, '解开了。，就，kjk', 0, 3, 1, 0, '2023-03-13 22:31:49', NULL);
-INSERT INTO `good` VALUES (4, '就，接口，接口，', NULL, '解开了。，就，kjk', 0, 3, 1, 0, '2023-03-13 22:31:49', NULL);
-INSERT INTO `good` VALUES (5, '就，接口，接口，', NULL, '解开了。，就，kjk', 0, 3, 1, 0, '2023-03-13 22:31:53', NULL);
-INSERT INTO `good` VALUES (6, '就，接口，接口，', NULL, '解开了。，就，kjk', 0, 3, 1, 0, '2023-03-13 22:31:53', NULL);
-INSERT INTO `good` VALUES (7, '更多让人很感动让更多人', NULL, '二十分是否瑟夫', 0, 2, 1, 0, '2023-03-13 22:32:20', NULL);
-INSERT INTO `good` VALUES (8, '更多让人很感动让更多人', NULL, '二十分是否瑟夫', 0, 2, 1, 0, '2023-03-13 22:32:20', NULL);
-INSERT INTO `good` VALUES (9, 'sefes', NULL, 'fsefsefawd', 0, 4, 1, 0, '2023-03-13 23:49:22', NULL);
-INSERT INTO `good` VALUES (10, 'sefes', NULL, 'fsefsefawd', 0, 4, 1, 0, '2023-03-13 23:49:22', NULL);
-INSERT INTO `good` VALUES (11, 'awdawd', NULL, 'adadawd', 0, 3, 1, 0, '2023-03-13 23:56:56', NULL);
-INSERT INTO `good` VALUES (12, 'awdawd', NULL, 'adadawd', 0, 3, 1, 0, '2023-03-13 23:56:56', NULL);
-INSERT INTO `good` VALUES (13, '二甲氨基我低洼地hi哦阿瓦达', NULL, 'sfsfseffsfesffthft', 6, 3, 1, 0, '2023-03-14 00:01:07', NULL);
-INSERT INTO `good` VALUES (14, '二甲氨基我低洼地hi哦阿瓦达', NULL, 'sfsfseffsfesffthft', 0, 3, 1, 0, '2023-03-14 00:01:07', NULL);
-INSERT INTO `good` VALUES (16, 'd\'r\'g\'d\'g', NULL, 'drgdg多个但如果', 0, 4, 1, 0, '2023-03-14 00:02:56', NULL);
-INSERT INTO `good` VALUES (17, '二甲氨基我低洼地hi哦阿瓦达', NULL, 'sfsfseffsfesffthft', 17, 3, 1, 0, '2023-03-14 15:07:46', NULL);
-INSERT INTO `good` VALUES (19, '一本好书', NULL, '这里可以写一些描述', 1, 2, 2, 0, '2023-03-15 15:44:49', NULL);
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名',
+    `profile_display` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '事物展示图',
+    `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '无描述' COMMENT '商品描述',
+    `count` int NOT NULL DEFAULT 1 COMMENT '商品数量',
+    `category_id` int NOT NULL DEFAULT 0 COMMENT '产品类别',
+    `hots` timestamp NULL DEFAULT NULL COMMENT '主动推荐，这里是设置推荐到期时间',
+    `user_id` int NOT NULL COMMENT '发布者id',
+    `deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+    `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `gmt_modified` timestamp NULL DEFAULT NULL COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `goods_FK`(`category_id`) USING BTREE,
+    INDEX `goods_FK_1`(`user_id`) USING BTREE,
+    CONSTRAINT `goods_FK` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `goods_FK_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for luck_permission
@@ -235,12 +210,14 @@ INSERT INTO `luck_role_permission` VALUES (1, 66, 1);
 INSERT INTO `luck_role_permission` VALUES (1, 68, 1);
 INSERT INTO `luck_role_permission` VALUES (1, 73, 1);
 INSERT INTO `luck_role_permission` VALUES (1, 75, 1);
+INSERT INTO `luck_role_permission` VALUES (2, 15, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 45, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 55, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 58, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 62, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 65, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 66, 1);
+INSERT INTO `luck_role_permission` VALUES (2, 68, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 73, 1);
 INSERT INTO `luck_role_permission` VALUES (2, 75, 1);
 
@@ -266,45 +243,6 @@ CREATE TABLE `order`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of order
--- ----------------------------
-INSERT INTO `order` VALUES (1, 17, 1, 2, 1, 1, '2023-03-14 15:54:08', NULL, 0);
-INSERT INTO `order` VALUES (2, 17, 1, 2, 1, 1, '2023-03-14 15:54:08', NULL, 0);
-INSERT INTO `order` VALUES (3, 17, 1, 2, 1, 1, '2023-03-14 15:54:12', NULL, 0);
-INSERT INTO `order` VALUES (4, 17, 1, 2, 1, 1, '2023-03-14 15:54:12', NULL, 0);
-INSERT INTO `order` VALUES (5, 13, 1, 2, 3, 1, '2023-03-15 10:40:32', NULL, 0);
-INSERT INTO `order` VALUES (6, 13, 1, 2, 0, 1, '2023-03-15 10:40:32', NULL, 0);
-INSERT INTO `order` VALUES (7, 13, 1, 2, 1, 1, '2023-03-15 10:40:35', NULL, 0);
-INSERT INTO `order` VALUES (8, 13, 1, 2, 0, 1, '2023-03-15 10:40:35', NULL, 0);
-INSERT INTO `order` VALUES (9, 13, 1, 2, 1, 1, '2023-03-15 10:40:36', NULL, 0);
-INSERT INTO `order` VALUES (10, 13, 1, 2, 1, 1, '2023-03-15 10:40:36', NULL, 0);
-INSERT INTO `order` VALUES (11, 13, 1, 2, 1, 1, '2023-03-15 15:43:29', NULL, 0);
-INSERT INTO `order` VALUES (12, 19, 2, 1, 1, 1, '2023-03-15 16:07:10', NULL, 0);
-INSERT INTO `order` VALUES (13, 19, 2, 1, 1, 1, '2023-03-17 21:16:43', NULL, 0);
-INSERT INTO `order` VALUES (14, 19, 2, 1, 1, 1, '2023-03-17 21:21:52', NULL, 0);
-INSERT INTO `order` VALUES (15, 9, 1, 2, 0, 1, '2023-03-17 21:32:20', NULL, 0);
-INSERT INTO `order` VALUES (16, 10, 1, 2, 0, 1, '2023-03-17 21:32:27', NULL, 0);
-INSERT INTO `order` VALUES (17, 7, 1, 2, 0, 1, '2023-03-17 21:32:33', NULL, 0);
-INSERT INTO `order` VALUES (18, 8, 1, 2, 0, 1, '2023-03-17 21:32:41', NULL, 0);
-INSERT INTO `order` VALUES (19, 5, 1, 2, 0, 1, '2023-03-17 21:32:44', NULL, 0);
-INSERT INTO `order` VALUES (20, 6, 1, 2, 0, 1, '2023-03-17 21:32:49', NULL, 0);
-INSERT INTO `order` VALUES (21, 3, 1, 2, 1, 1, '2023-03-17 21:58:08', NULL, 0);
-INSERT INTO `order` VALUES (22, 4, 1, 2, 1, 1, '2023-03-17 21:59:07', NULL, 0);
-INSERT INTO `order` VALUES (23, 1, 1, 2, 1, 1, '2023-03-17 21:59:16', NULL, 0);
-INSERT INTO `order` VALUES (24, 2, 1, 2, 1, 1, '2023-03-17 21:59:25', NULL, 0);
-INSERT INTO `order` VALUES (25, 16, 1, 2, 1, 1, '2023-03-17 22:18:56', NULL, 0);
-INSERT INTO `order` VALUES (26, 12, 1, 2, 1, 1, '2023-03-17 22:19:16', NULL, 0);
-INSERT INTO `order` VALUES (27, 11, 1, 2, 1, 1, '2023-03-17 22:21:26', NULL, 0);
-INSERT INTO `order` VALUES (28, 14, 1, 2, 1, 1, '2023-03-17 22:24:56', NULL, 0);
-INSERT INTO `order` VALUES (29, 13, 1, 2, 1, 1, '2023-03-17 22:25:11', NULL, 0);
-INSERT INTO `order` VALUES (30, 13, 1, 2, 1, 3, '2023-03-17 22:28:03', NULL, 0);
-INSERT INTO `order` VALUES (31, 13, 1, 2, 1, 1, '2023-03-17 22:29:08', NULL, 0);
-INSERT INTO `order` VALUES (32, 13, 1, 2, 1, 4, '2023-03-17 22:29:12', NULL, 0);
-INSERT INTO `order` VALUES (33, 17, 1, 2, 4, 1, '2023-03-17 22:51:10', NULL, 0);
-INSERT INTO `order` VALUES (34, 19, 2, 1, 2, 1, '2023-03-18 23:53:40', NULL, 0);
-INSERT INTO `order` VALUES (35, 19, 2, 1, 2, 1, '2023-03-18 23:53:45', NULL, 0);
-
--- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -320,11 +258,5 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `user_un`(`email`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES (1, 'liuscra', 'liuscraft@qq.com', '123123', 1, '2023-03-10 22:41:50', NULL, 0);
-INSERT INTO `user` VALUES (2, '123123', '3434@qq.com', '123123', 2, '2023-03-14 15:14:35', NULL, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -9,10 +9,6 @@ const instance = Axios.create({
 instance.interceptors.request.use(config => {
     let token = localStorage.getItem("token");
     if (token) config.headers["token"] = token;
-    if (config.params) {
-        let urlSearchParams = new URLSearchParams(config.params);
-        config.url += "?" + urlSearchParams.toString();
-    }
     if ((config.method === 'post' || config.method === 'put') && !config.hasFile) {
         config.data = typeof config.data === 'object' ? JSON.stringify(config.data) : config.data;
     } else if (config.hasFile) {

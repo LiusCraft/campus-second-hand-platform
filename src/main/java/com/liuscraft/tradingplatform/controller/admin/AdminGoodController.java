@@ -3,6 +3,10 @@ package com.liuscraft.tradingplatform.controller.admin;
 
 import javax.annotation.Resource;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.liuscraft.tradingplatform.entity.Good;
+import com.liuscraft.tradingplatform.mapper.GoodMapper;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,8 @@ import com.liuscraft.tradingplatform.entity.dto.GoodDto;
 import com.liuscraft.tradingplatform.service.IGoodService;
 import com.liuscraft.tradingplatform.utils.R;
 import com.liuscraft.tradingplatform.utils.threadlocal.ThreadLocalServlet;
+
+import java.sql.Timestamp;
 
 /**
  * <p>
@@ -59,6 +65,25 @@ public class AdminGoodController {
     public R deleteGood(@PathVariable("id") Integer goodId) {
         ThreadLocalServlet.editor.isAdmin();
         return goodService.deleteById(goodId);
+    }
+
+    final long MIN_HOT_EXPIRE = 24 * 60 * 60 * 1000;
+    @PutMapping("hot/{goodId}")
+    public R setGoodHot(@PathVariable Integer goodId, Long hotExpire) {
+        GoodMapper baseMapper = (GoodMapper) goodService.getBaseMapper();
+        if (hotExpire == null) {
+            if(!baseMapper.setHotsById(goodId, new Timestamp(System.currentTimeMillis()-1000))){
+                return R.error().msg("可能不存在该商品");
+            }
+            return R.ok().msg("该商品已取消主动推荐");
+        }
+        if (hotExpire < MIN_HOT_EXPIRE){
+            return R.error().msg("请设置正常的推荐到期时间");
+        }
+        if(!baseMapper.setHotsById(goodId, new Timestamp(System.currentTimeMillis() + hotExpire))){
+            return R.error().msg("可能不存在该商品");
+        }
+        return R.ok().msg("该商品已被主动推荐");
     }
 
 }

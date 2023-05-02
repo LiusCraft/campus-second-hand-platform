@@ -24,15 +24,15 @@ import java.util.Set;
 public class LuckVerifyConfig {
     @Resource
     ILuckRolePermissionService luckRolePermissionService;
-
-
     @Bean
     public LuckAuthorityService<LuckAuthority> getUserInfoService() {
         return new LuckAuthorityService<LuckAuthority>() {
             @Override
             public LuckAuthority getUserAuthorization(HttpServletRequest request) {
                 String userId = JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ID);
-                if (userId == null || userId.isEmpty()) return null;
+                if (userId == null || userId.isEmpty()) {
+                    return null;
+                }
                 ThreadLocalServlet.editor.setValue("userId", Integer.parseInt(userId));
                 Integer id = JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID);
                 List<LuckPermission> rolePermission = luckRolePermissionService.getRolePermission(JwtUtils.getMemberClaimByJwtToken(request, JwtUtils.JwtClaim.ROLE_ID));

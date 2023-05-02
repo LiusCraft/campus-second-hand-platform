@@ -20,7 +20,7 @@ import com.liuscraft.tradingplatform.utils.R;
  * @since 2023-03-09
  */
 public interface IGoodService extends IService<Good> {
-R getList(Integer currentPage, Integer limit, Integer categoryId, Integer userId);
+    R getList(Integer currentPage, Integer limit, Integer categoryId, Integer userId);
 
     R goodById(Integer goodId);
 
@@ -34,4 +34,7 @@ R getList(Integer currentPage, Integer limit, Integer categoryId, Integer userId
     R buyGood(Integer id, Integer buyCount);
 
     boolean saveImg(Good good, MultipartFile img);
+
+    R getCarousel();
+
 }

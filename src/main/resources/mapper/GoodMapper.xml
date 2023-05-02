@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuscraft.tradingplatform.mapper.GoodMapper">
 
+    <update id="setHotsById" parameterType="map">
+        update good set hots = #{hotsTime}, gmt_modified = CURRENT_TIMESTAMP where id=#{id} and deleted=0
+    </update>
 </mapper>

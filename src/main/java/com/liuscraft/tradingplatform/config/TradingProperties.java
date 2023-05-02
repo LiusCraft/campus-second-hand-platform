@@ -31,7 +31,9 @@ public class TradingProperties {
         if (!StringUtils.hasLength(saveImgLocation)){
             saveImgLocation = System.getProperty("user.dir")+"/img";
             file = new File(saveImgLocation);
-            if (!file.exists() && !file.mkdir()) throw new RuntimeException("根据运行路径创建图片存储路径文件夹失败,请手动");
+            if (!file.exists() && !file.mkdir()) {
+                throw new RuntimeException("根据运行路径创建图片存储路径文件夹失败,请手动");
+            }
         }else {
             file = new File(saveImgLocation);
         }

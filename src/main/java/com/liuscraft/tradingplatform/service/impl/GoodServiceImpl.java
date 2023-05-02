@@ -2,12 +2,8 @@ package com.liuscraft.tradingplatform.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -74,16 +70,20 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
         queryWrapper.ge(Good::getCount, 1);
         queryWrapper.orderByDesc(Good::getGmtCreate);
         IPage<Good> results = page(page, queryWrapper);
-        if (results.getRecords().isEmpty())
+        if (results.getRecords().isEmpty()) {
             return R.error().msg("未查询到相关商品").data("data", Collections.EMPTY_LIST);
+        }
         Set<Integer> userIds = new HashSet<>();
         Set<Integer> categoryIds = new HashSet<>();
         results.getRecords().forEach(v->{
             userIds.add(v.getUserId());
-            if (noCateGoryId)
+            if (noCateGoryId) {
                 categoryIds.add(v.getCategoryId());
+            }
         });
-        if (!noCateGoryId) categoryIds.add(category);
+        if (!noCateGoryId) {
+            categoryIds.add(category);
+        }
         HashMap<Integer, UserVo> userHashMap = new HashMap<>();
         userService.userList(userIds)
                 .forEach(userVo -> userHashMap.put(userVo.getId(), userVo));
@@ -94,19 +94,25 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
             GoodVo goodVo = GoodVo.toVo(good);
             goodVo.setUser(userHashMap.get(good.getUserId()));
             goodVo.setCategory(categoryMap.get(good.getCategoryId()));
+            goodVo.setDescription("");
             return goodVo;
         }).collect(Collectors.toList());
         return R.ok().msg("查询到相关商品").data("data", goodVoList).data("count", results.getTotal()); }
     @Override
     public R goodById(Integer goodId) {
         Good good = getById(goodId);
-        if (good == null || good.getDeleted()) return R.error().msg("该商品不存在！");
-        GoodVo goodVo = new GoodVo();
-        BeanUtils.copyProperties(good, goodVo);
+        if (good == null || good.getDeleted()) {
+            return R.error().msg("该商品不存在！");
+        }
+        GoodVo goodVo = GoodVo.toVo(good);
         User user = userService.getById(good.getUserId());
-        if (user == null) return R.error().msg("该商品信息存在错误");
+        if (user == null) {
+            return R.error().msg("该商品信息存在错误");
+        }
         Category category = categoryService.getById(good.getCategoryId());
-        if (category == null) return R.error().msg("该商品信息存在错误");
+        if (category == null) {
+            return R.error().msg("该商品信息存在错误");
+        }
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         goodVo.setUser(userVo);
@@ -121,9 +127,13 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
         int userId = ThreadLocalServlet.getUserId();
         boolean admin = ThreadLocalServlet.isAdmin();
         R r = goodById(goodId);
-        if (!r.getState()) return r;
+        if (!r.getState()) {
+            return r;
+        }
         R categoryR = categoryService.cateGoryById(goodDto.getCategoryId());
-        if (!categoryR.getState()) return categoryR;
+        if (!categoryR.getState()) {
+            return categoryR;
+        }
         GoodVo goodVo = ((GoodVo) r.getData().get("data"));
         if(goodVo.getUser().getId() != userId && !admin) {
             return R.error().msg("您没有权限这么做！");
@@ -139,7 +149,9 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
             }
             good.setProfileDisplay("good-"+goodId+".jpg");
         }
-        if (!updateById(good)) return R.error().msg("更新商品信息失败");
+        if (!updateById(good)) {
+            return R.error().msg("更新商品信息失败");
+        }
         return R.ok().msg("商品信息更新成功");
     }
 
@@ -148,13 +160,19 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
     public R addGood(GoodDto goodDto) {
        Good good = new Good();
         R categoryR = categoryService.cateGoryById(goodDto.getCategoryId());
-        if (!categoryR.getState()) return categoryR;
+        if (!categoryR.getState()) {
+            return categoryR;
+        }
         BeanUtils.copyProperties(goodDto, good);
         Integer userId = ThreadLocalServlet.getUserId();
         good.setUserId(userId);
         good.setProfileDisplay("good-"+good.getId()+".jpg");
-        if (!save(good)) return R.error().msg("添加商品失败");
-        if(!saveImg(good, goodDto.getImg())) TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        if (!save(good)) {
+            return R.error().msg("添加商品失败");
+        }
+        if(!saveImg(good, goodDto.getImg())) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
         return R.ok().msg("添加商品成功").data("data", good);
     }
 
@@ -162,32 +180,39 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
     public R deleteById(Integer goodId) {
         boolean admin = ThreadLocalServlet.isAdmin();
         Good good = getById(goodId);
-        if (good == null) return R.error().msg("该商品不存在!");
-        if(good.getUserId().intValue() != ThreadLocalServlet.getUserId().intValue() && !admin)
-            return R.error().msg("您没有权限删除该商品");
-        try {
-            if(!removeById(goodId)) return R.error().msg("删除该商品失败");
-            return R.ok().msg("删除成功").data("data", good);
-        }catch (Exception e) {
-            return R.error().msg("该商品存在订单，无法删除该商品！");
+        if (good == null) {
+            return R.error().msg("该商品不存在!");
         }
+        if(good.getUserId().intValue() != ThreadLocalServlet.getUserId().intValue() && !admin) {
+            return R.error().msg("您没有权限删除该商品");
+        }
+        if(!removeById(goodId)) {
+            return R.error().msg("删除该商品失败");
+        }
+        return R.ok().msg("删除成功").data("data", good);
     }
 
     @Override
     public List<GoodVo> goodVoList(Collection<Integer> ids) {
-        if (ids.isEmpty()) return Collections.EMPTY_LIST;
+        if (ids.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
        return listByIds(ids).stream().map(GoodVo::toVo).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public R buyGood(Integer id, Integer buyCount) {
-        if (buyCount<1) return R.error().msg("请正确填写购买数量~");
+        if (buyCount<1) {
+            return R.error().msg("请正确填写购买数量~");
+        }
         synchronized ((id.intValue()+"").intern()){
             Good good = getById(id);
             Integer count = good.getCount();
             count -= buyCount;
-            if (count < 0) return R.error().msg("该商品已被售空啦~");
+            if (count < 0) {
+                return R.error().msg("该商品已被售空啦~");
+            }
             Object savepoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
             good.setCount(count);
             R orderR = orderService.addOrder(good, buyCount);
@@ -217,4 +242,35 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements IG
          }
         
     }
+
+    /**
+     * 最大推送数量
+     */
+    private static final long HOT_MAX_SIZE = 5;
+
+    @Override
+    public R getCarousel() {
+        LambdaQueryWrapper<Good> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.gt(Good::getHots, new Timestamp(System.currentTimeMillis()));
+        lambdaQueryWrapper.orderByDesc(Good::getGmtModified);
+        List<GoodVo> resultData = new LinkedList<>();
+        IPage<Good> result = page(new Page<Good>(1, HOT_MAX_SIZE), lambdaQueryWrapper);
+        for (int i = 0; i < result.getRecords().size(); i++) {
+            resultData.add(GoodVo.toVo(result.getRecords().get(i)));
+        }
+        // 若主动指定的推荐查询后还有空余位置则拿最新发布商品填补
+        long dCount = HOT_MAX_SIZE - result.getRecords().size();
+        if (dCount > 0) {
+            IPage<Good> resultFree = page(new Page<Good>(1, dCount),
+                    new LambdaQueryWrapper<Good>().orderByDesc(Good::getGmtCreate)
+                            .notIn(!resultData.isEmpty(), Good::getId, resultData.stream()
+                                    .map(GoodVo::getId).collect(Collectors.toSet()))
+            );
+            for (int i = 0; i < resultFree.getRecords().size(); i++) {
+                resultData.add(GoodVo.toVo(resultFree.getRecords().get(i)));
+            }
+        }
+        return R.ok().data("data", resultData);
+    }
+
 }

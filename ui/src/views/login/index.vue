@@ -2,6 +2,7 @@
   <v-container
       class="fill-height"
       fluid
+      style="background-image: url('https://picsum.photos/1600/900?random=1')"
   >
     <v-row
         align="center"
@@ -84,7 +85,6 @@
             </v-tooltip>
           </v-toolbar>
           <v-card-text>
-            <v-form>
               <v-text-field
                   label="邮箱"
                   name="email"
@@ -92,6 +92,21 @@
                   prepend-icon="mdi-email"
                   type="text"
                   hint="用于登录账号"
+                  persistent-hint
+                  :readonly="verifyCodeExpire>0"
+              >
+                <template v-slot:append-outer>
+                  <v-btn :disabled="verifyCodeExpire>0" text outlined small @click="getEmailCode()">{{getCodeBtnTitle}}</v-btn>
+                </template>
+              </v-text-field>
+
+              <v-text-field
+                  label="邮箱验证码"
+                  name="email"
+                  v-model="loginData.code"
+                  prepend-icon="mdi-web-check"
+                  type="text"
+                  hint="用于验证邮箱真实性"
                   persistent-hint
               ></v-text-field>
 
@@ -113,7 +128,6 @@
                   hint="请为自己账号创建大于6位数账号"
                   persistent-hint
               ></v-text-field>
-            </v-form>
           </v-card-text>
           <v-card-actions>
             <v-btn plain color="error" @click="isLogin=true">登录账号</v-btn>
@@ -126,8 +140,9 @@
   </v-container>
 </template>
 <script>
-import {API_USER_REGISTER} from "@/apis/user";
+import {API_GET_USER_VERIFY, API_USER_REGISTER} from "@/apis/user";
 import {mapActions} from "vuex";
+var verifyExpireTimer = null;
 export default {
   data() {
     return {
@@ -135,14 +150,42 @@ export default {
       loginData: {
         email: "",
         password: "",
-        nickname: ""
+        nickname: "",
+        code: ""
       },
+      verifyCodeExpire: 0
+    }
+  },
+  computed: {
+    getCodeBtnTitle() {
+      return this.verifyCodeExpire>0?`${this.verifyCodeExpire}秒后重试`:"获取验证码"
     }
   },
   methods: {
     ...mapActions({
       actionLogin: "login"
     }),
+    getEmailCode() {
+      API_GET_USER_VERIFY(this.loginData.email).then(({data})=>{
+        this.$vuetifyFunc.snackbar.show(data.msg, data.state?"success":"error");
+        if(data.code===404) {
+          return;
+        }
+        this.verifyCodeExpire = Math.floor((data.data.expire - data.data.current)/1000)
+        if (data.state && verifyExpireTimer) {
+          clearInterval(verifyExpireTimer);
+          verifyExpireTimer = null;
+        }
+        if(verifyExpireTimer == null) {
+          verifyExpireTimer = setInterval(()=>{
+            if (this.verifyCodeExpire>0)
+              this.verifyCodeExpire--;
+            else
+              clearInterval(verifyExpireTimer);
+          }, 1000);
+        }
+      })
+    },
     login(loginData){
       this.actionLogin(loginData).then(ok=>{
         if (ok){
@@ -151,8 +194,9 @@ export default {
       })
     },
     register() {
-      API_USER_REGISTER(this.loginData.email, this.loginData.password, this.loginData.nickname).then(({data}) => {
+      API_USER_REGISTER(this.loginData.email, this.loginData.password, this.loginData.nickname, this.loginData.code).then(({data}) => {
         if (!data.state) {
+          this.$vuetifyFunc.snackbar.error(data.msg)
           return;
         }
         this.login(this.loginData);

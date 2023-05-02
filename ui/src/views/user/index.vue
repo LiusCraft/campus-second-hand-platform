@@ -3,15 +3,21 @@
     <v-app-bar dark app color="primary">
       <v-app-bar-title>二手交易平台</v-app-bar-title>
       <v-spacer/>
-      <v-btn text to="/">首页</v-btn>
-      <template v-if="userInfo">
-        <v-btn text to="/manager">
-          商品管理
-        </v-btn>
-        <v-btn text to="/order">订单管理</v-btn>
-        <v-btn text to="/admin" v-if="userInfo.data.roleId===1">管理后台</v-btn>
-        <v-btn text @click="outLogin()">退出登录</v-btn>
-      </template>
+
+
+        <v-toolbar-items>
+          <v-btn text to="/">首页</v-btn>
+          <template v-if="userInfo">
+          <v-btn text to="/manager">
+            商品管理
+          </v-btn>
+          <v-btn text to="/order">订单管理</v-btn>
+          <v-btn text to="/admin" v-if="userInfo.data.roleId===1">管理后台</v-btn>
+          <v-btn text @click="outLogin()">退出登录</v-btn>
+          </template>
+        </v-toolbar-items>
+
+
       <v-btn icon @click="openUser()" v-if="!userInfo">
         <v-icon>mdi-account</v-icon>
       </v-btn>

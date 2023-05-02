@@ -3,6 +3,7 @@ package com.liuscraft.tradingplatform.entity.dto;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,8 +20,10 @@ public class GoodDto {
     @Range(max = 100, min = 1, message = "商品数量最少为一")
     private Integer count;
     @NotBlank(message = "请完成商品名称")
+    @Length(min = 2, max = 20, message = "商品名过长或太短")
     private String name;
     @NotBlank(message = "请完善商品描述")
+    @Length(min = 2, max = 255, message = "描述信息过长或太少")
     private String description;
 
     MultipartFile img;

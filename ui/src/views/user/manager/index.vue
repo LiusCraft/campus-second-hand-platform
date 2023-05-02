@@ -1,11 +1,13 @@
 <template>
   <v-container>
     <v-chip-group color="primary" v-model="selectedCategory" mandatory @change="getList">
+      <v-btn class="mr-2" color="primary" @click="editGood(null)">发布商品</v-btn>
       <v-chip key="category-all" value="0" :disabled="loading">所有分类</v-chip>
       <v-chip v-for="(categoryItem) in categoryList" :disabled="loading" :value="categoryItem.id"
               :key="'category-'+categoryItem.id">{{ categoryItem.name }}
       </v-chip>
     </v-chip-group>
+
     <v-divider class="mb-2"/>
     <v-row v-if="goodList.data.length">
       <v-col v-for="(goodItem,goodIndex) in goodList.data" :key="goodItem.id">
@@ -49,7 +51,12 @@ export default {
   },
   methods: {
     editGood(item) {
-      if (item == null) return;
+      if (item == null) {
+        this.editGoodDialog = {
+          data: null,
+          open: true
+        }
+      }else
       this.editGoodDialog = {
         data: Object.assign({}, item),
         open: true
@@ -88,7 +95,6 @@ export default {
   },
   mounted() {
     this.getCategoryList();
-    this.getList();
   },
   data() {
     return {

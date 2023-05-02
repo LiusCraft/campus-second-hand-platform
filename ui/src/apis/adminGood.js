@@ -45,3 +45,13 @@ export function API_ADMIN_GOOD_DELETE(id){
         url: rootApi+"/"+id
     })
 }
+
+export function API_PUT_GOOD_HOTS(id, hotExpire) {
+    return request({
+        method: "put",
+        url: rootApi + "/hot/" + id,
+        params: {
+            hotExpire
+        }
+    })
+}

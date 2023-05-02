@@ -65,7 +65,6 @@ export default {
   },
   mounted() {
     this.getCategoryList()
-    this.getList()
   },
   methods: {
     editGood(item) {

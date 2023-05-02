@@ -54,6 +54,11 @@ public class Good implements Serializable {
     private Integer categoryId;
 
     /**
+     * 主动推荐，过期时间
+     */
+    private Date hots;
+
+    /**
      * 发布者id
      */
     private Integer userId;
@@ -73,6 +78,7 @@ public class Good implements Serializable {
      * 修改时间
      */
     private Date gmtModified;
+
 
 
 }
